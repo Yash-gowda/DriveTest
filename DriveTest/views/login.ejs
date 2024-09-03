@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+  <%- include("layout/header") %>
+
+  <body>
+    <!-- Navigation-->
+    <%-include("layout/navbar") %>
+
+    <!-- Page Header-->
+    <header class="masthead" style="background-image: url('/assets/img/login.jpg')" >
+      <div class="container position-relative px-4 px-lg-5">
+        <div class="row gx-4 gx-lg-5 justify-content-center">         
+      </div>
+    </header>
+    <!-- Main Content-->
+    <main class="mb-4">
+      <div class="container px-4 px-lg-5">
+        <div class="row gx-4 gx-lg-5 justify-content-center">
+          <div class="col-md-6">
+            <p>Login with your username and password</p>
+            <div class="my-5">
+              <% if(errorArrLogin!==null && errorArrLogin.length > 0) { %> <%
+              for(var i=0; i < errorArrLogin.length; i++) { %>
+              <div class="alert alert-danger"><%= errorArrLogin[i] %></div>
+              <% } %> <% } %>
+              <form id="contactForm" action="/users/login" method="post">
+                <div class="control-group mb-3">
+                  <div class="form-group floating-label-form-group controls">
+                    <label>Username</label>
+                    <input type="text" name="userName" class="form-control" placeholder="User Name" />
+                  </div>
+                </div>
+                <div class="control-group mb-3">
+                  <div class="form-group floating-label-form-group controls">
+                    <label>Password</label>
+                    <input  type="text" name="password" class="form-control" placeholder="password" />
+                  </div>
+                </div>
+
+                <div class="form-group">
+                  <button type="submit" class="btn btn-primary" id="loginBtn">
+                    Login
+                  </button>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
+    <!-- Footer-->
+    <%- include("layout/footer") %>
+
+    <!-- Scripts-->
+    <%- include("layout/scripts") %>
+  </body>
+</html>

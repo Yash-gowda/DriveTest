@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="en">
+  <%- include("layout/header") %>
+
+  <body>
+    <!-- Navigation-->
+    <%-include("layout/navbar") %>
+    <!-- Page Header-->
+    <header
+      class="masthead"
+      style="background-image: url('/assets/img/g2.jpg')" >
+      <div class="container position-relative px-4 px-lg-5">
+        <div class="row gx-4 gx-lg-5 justify-content-center">
+          <div class="col-md-10 col-lg-8 col-xl-7">
+            <div class="page-heading">
+              <h1>G2 Test</h1>
+            </div>
+          </div>
+        </div>
+      </div>
+    </header>
+    <!-- Main Content-->
+    <main class="mb-4">
+      <div class="container px-4 px-lg-5">
+        <div class="row gx-4 gx-lg-5 justify-content-center">
+          <div class="col-md-10 col-lg-8 col-xl-7">
+          <div class="my-5">
+              <form
+                action="/appointment_date"  enctype="multipart/form-data"  method="post">
+                <div>
+                  <h3> Please check for the availablity of slots</h3>
+                  <label for="date-picker"> Choose a date</label>
+                </div>
+
+                <input class="form-control mb-4" type="date"  id="date-picker" name="selected_date"  />
+                <button class="btn btn-primary text-uppercase d-block mx-auto mb-5" id="submitButton" type="submit"            >
+                  Submit
+                </button>
+              </form>
+              <form id="g2test-booking" method="post" action="/update-details">
+                <h3>Schedule Information</h3>
+                <select class="" name="appointment_id" id="appointment_id">
+                  <option selected disabled>Select Slot</option>
+                  <% if (appointments.length >=1 ) { %> <%
+                  appointments.forEach((appointment) => { %>
+
+                  <option value="<%= appointment._id %>">
+                    <%= appointment.time %>
+                  </option>
+
+                  <%}) %> <% } else {%>
+                  <option selected disabled>unavailable</option>
+                  <% } %>
+                </select>
+              </br>
+
+            </br>
+          </br>
+                <h3>Please fill the details</h3>
+                
+                <% if(userDetail.fname == "default" || userDetail.fname == "") {
+                %>
+                <div class="form-floating mb-3">
+                  <input type="text"  class="form-control"  id="fname"  name="fname"  placeholder="First Name"  />
+                  <label for="fname">First Name</label>
+                  <div class="error" id="fnameError"></div>
+                </div>
+                <% } else { %>
+
+                <div class="form-floating mb-3">
+                  <input  type="text"  class="form-control"  disabled  id="fname"  name="fname"  placeholder="First Name" value="<%=userDetail.fname %>" />
+                  <label for="fname">First Name</label>
+                  <div class="error" id="fnameError"></div>
+                </div>
+
+                <% } %> <% if(userDetail.lname == "default" || userDetail.lname == "") { %>
+                <div class="form-floating mb-3">
+                  <input  type="text"  class="form-control"  id="lname"  name="lname"  placeholder="Last Name" />
+                  <label for="lname">Last Name</label>
+                  <div class="error" id="lnameError"></div>
+                </div>
+                <% } else { %>
+
+                <div class="form-floating mb-3">
+                  <input type="text"  class="form-control"  disabled  id="lname"  name="lname"  placeholder="Last Name" value="<%=userDetail.lname %>" />
+                  <label for="lname">Last Name</label>
+                  <div class="error" id="lnameError"></div>
+                </div>
+
+                <% } %> <% if(userDetail.license == "default" ||
+                userDetail.license == "") { %>
+                <div class="form-floating mb-3">
+                  <input type="text"  class="form-control"  id="license"  name="license"  placeholder="License Number" />
+                  <label for="license">License Number</label>
+                  <div class="error" id="licenseError"></div>
+                </div>
+                <% } else { %>
+                <div class="form-floating mb-3">
+                  <input  type="text"  class="form-control"  disabled  id="license"  name="license"  placeholder="License Number"  value="<%=userDetail.license %>" />
+                  <label for="license">License Number</label>
+                  <div class="error" id="licenseError"></div>
+                </div>
+                <% } %>
+
+                <div class="row mb-3">
+                  <div class="col-md-6">
+                    <% if(userDetail.age == 0 || (userDetail.age == null ||
+                    userDetail.age == "" || userDetail.age == undefined)) { %>
+                    <div class="form-floating mb-3">
+                      <input  type="number"  class="form-control"  id="age"  name="age"  placeholder="Age" />
+                      <label for="age">Age</label>
+                      <div class="error" id="ageError"></div>
+                    </div>
+                    <% } else { %>
+                    <div class="form-floating mb-3">
+                      <input  type="number"  class="form-control"  disabled  id="age"  name="age"  placeholder="Age" value="<%=userDetail.age %>"  />
+                      <label for="age">Age</label>
+                      <div class="error" id="ageError"></div>
+                    </div>
+                    <% } %>
+                  </div>
+                  <div class="col-md-6">
+                    <% if(userDetail.dob == "default" || userDetail.dob == "") {
+                    %>
+                    <div class="form-floating mb-3">
+                      <input  type="date"  class="form-control"  id="dob"  name="dob"  placeholder="Birth date" />
+                      <label for="dob">Birth Date</label>
+                      <div class="error" id="dobError"></div>
+                    </div>
+                    <% } else { %>
+                    <div class="form-floating mb-3">
+                      <input type="date"  class="form-control"  disabled  id="dob"  name="dob"  placeholder="Birth date" value="<%=userDetail.dob %>" />
+                      <label for="dob">Birth Date</label>
+                      <div class="error" id="dobError"></div>
+                    </div>
+                    <% } %>
+                  </div>
+                </div>
+                <div class="mb-3 fw-bold">Car Details</div>
+                <div class="row mb-3">
+                  <div class="col-md-6">
+                    <% if(userDetail.car.make == "default") { %>
+                    <div class="form-floating mb-3">
+                      <input  type="text"  class="form-control"  id="carMake"  name="carMake"  placeholder="Make" />
+                      <label for="carMake">Make</label>
+                      <div class="error" id="carMakeError"></div>
+                    </div>
+                    <% } else { %>
+                    <div class="form-floating mb-3">
+                      <input  type="text"  class="form-control"  id="carMake"  name="carMake"  placeholder="Make" value="<%=userDetail.car.make %>" />
+                      <label for="carMake">Make</label>
+                      <div class="error" id="carMakeError"></div>
+                    </div>
+                    <% } %>
+                  </div>
+                  <div class="col-md-6">
+                    <% if(userDetail.car.model == "default") { %>
+                    <div class="form-floating mb-3">
+                      <input  type="text"  class="form-control"  id="carModel"  name="carModel"  placeholder="Model" />
+                      <label for="carModel">Model</label>
+                      <div class="error" id="carModelError"></div>
+                    </div>
+                    <% } else { %>
+                    <div class="form-floating mb-3">
+                      <input  type="text"  class="form-control"  id="carModel"  name="carModel"  placeholder="Model" value="<%=userDetail.car.model %>" />
+                      <label for="carModel">Model</label>
+                      <div class="error" id="carModelError"></div>
+                    </div>
+                    <% } %>
+                  </div>
+
+                  <div class="col-md-6">
+                    <% if(userDetail.car.year == 0) { %>
+                    <div class="form-floating mb-3">
+                      <input  type="text"  class="form-control"  id="carYear"  name="carYear"  placeholder="Year"  />
+                      <label for="carYear">Year</label>
+                      <div class="error" id="carYearError"></div>
+                    </div>
+                    <% } else { %>
+                    <div class="form-floating mb-3">
+                      <input  type="text"  class="form-control"  id="carYear"  name="carYear"  placeholder="Year"  value="<%=userDetail.car.year %>" />
+                      <label for="carYear">Year</label>
+                      <div class="error" id="carYearError"></div>
+                    </div>
+                    <% } %>
+                  </div>
+                  <div class="col-md-6">
+                    <% if(userDetail.car.plateNumber == "default") { %>
+                    <div class="form-floating mb-3">
+                      <input  type="text"  class="form-control"  id="carPlateNumber"  name="carPlateNumber"  placeholder="Plate number" />
+                      <label for="carPlateNumber">Plate number</label>
+                      <div class="error" id="carPlateNumberError"></div>
+                    </div>
+                    <% } else { %>
+                    <div class="form-floating mb-3">
+                      <input  type="text"  class="form-control"  id="carPlateNumber"  name="carPlateNumber"  placeholder="Plate number" value="<%=userDetail.car.plateNumber %>" />
+                      <label for="carPlateNumber">Plate number</label>
+                      <div class="error" id="carPlateNumberError"></div>
+                    </div>
+                    <% } %>
+                  </div>
+                </div>
+                <button class="btn btn-primary text-uppercase d-block mx-auto"  id="submitButton"  type="submit" >
+                  Submit
+                </button>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
+    <!-- Footer-->
+    <%- include("layout/footer") %>
+
+    <!-- Scripts-->
+    <%- include("layout/scripts") %>
+  </body>
+</html>

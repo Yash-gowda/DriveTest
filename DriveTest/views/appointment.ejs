@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+  <%- include("layout/header") %>
+  <body>
+    <!-- Navigation-->
+    <%-include("layout/navbar") %>
+
+    <!-- Page Header-->
+    <header
+      class="masthead"
+      style="background-image: url('/assets/img/dash.jpg')"
+    >
+      <div class="container position-relative px-4 px-lg-5">
+        <div class="row gx-4 gx-lg-5 justify-content-center">
+          <div class="col-md-10 col-lg-8 col-xl-7">
+            <div class="site-heading">
+              <h1>Enable appointments for booking</h1>
+            </div>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <main class="mb-4">
+      <div class="container px-4 px-lg-5">
+        <div class="row gx-4 gx-lg-5 justify-content-center">
+          <div class="col-md-6">
+            <section class="appointment-section">
+              <h1>Appointments</h1>
+
+              <% if(errors != null && errors.length >0) { %> <% for( var i=0 ; i
+              < errors.length ; i++) { %>
+              <div class="alert alert-danger" id="error-hanlder">
+                <%= errors[i] %>
+              </div>
+              <% }%> <% } %>
+
+              <form action="/admin/appointment/add"  method="post" name="appointment-form" id="appointment-form">
+                <p>Choose the  date and add the time slots</p>
+                <div class="control-group mb-3">
+                  <div class="form-group floating-label-form-group controls">
+                    <input class="form-control" type="date" id="appointment_date" name="appointment_date" />
+                  </div>
+                </div>
+
+                <div class="appointment-time-list">
+                  <% time.forEach((t) => { %>
+                  <div class="form-group">
+                    <input type="radio" class="" name="appointment_time" id="<%- t.value %>" value="<%- t.value %>" />
+                    <label class="" for="<%- t.value %>"><%- t.display %></label>
+                  </div>
+
+                  <% }) %>
+                </div>
+                <button class="btn btn-primary text-uppercase d-block mx-auto" id="appointment_btn" type="submit">
+                  Add
+                </button>
+              </form>
+            </section>
+          </div>
+        </div>
+      </div>
+    </main>
+    <!-- Footer-->
+    <%- include("layout/footer") %>
+
+    <!-- Scripts-->
+    <%- include("layout/scripts") %>
+    <script>
+      document
+        .getElementById("appointment_btn")
+        .addEventListener("click", (e) => {
+          e.preventDefault();
+          let appointment_date = document.getElementById("appointment_date");
+          const error_handler = document.getElementById("error-hanlder");
+          const appointment_time =
+            document.getElementsByName("appointment_time");
+
+          var selectedOption = Array.from(appointment_time).find(
+            (radio) => radio.checked
+          );
+          const payload = {
+            appointment_date: appointment_date.value,
+            appointment_time: selectedOption?.value,
+          };
+
+          if (appointment_date.value === "" || !selectedOption?.value) {
+            alert("Some data fields are missing. please check");
+            return;
+          }
+          console.log(payload);
+          postRequest("/admin/appointment/add", payload).then((data) => {
+            console.log(data);
+
+            if (data.code === 1) {
+              // error has occured,
+              alert(data.message); //display the error message
+              return;
+            }
+
+            const target = document.getElementById(selectedOption.value);
+            target.disabled = true;
+
+            alert("Data has been saved!");
+          });
+        });
+    </script>
+  </body>
+</html>
